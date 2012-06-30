@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="isometric" width="10" height="20" tilewidth="64" tileheight="32">
+ <tileset firstgid="1" name="iso_temp" tilewidth="64" tileheight="64">
+  <image source="iso_temp.png" width="128" height="64"/>
+ </tileset>
+ <layer name="Background" width="10" height="20">
+  <data encoding="base64" compression="zlib">
+   eJxjYmBgYBrFo3gUY8UAd14BkQ==
+  </data>
+ </layer>
+ <layer name="Wall" width="10" height="20">
+  <data encoding="base64" compression="zlib">
+   eJxjZGBgYCQSEwKj6kbVDSV1xGAAWxAAOQ==
+  </data>
+ </layer>
+</map>

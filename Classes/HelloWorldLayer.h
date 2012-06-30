@@ -9,13 +9,31 @@
 
 // When you import this file, you import all the cocos2d classes
 #import "cocos2d.h"
-
+@class Player;
 // HelloWorldLayer
 @interface HelloWorldLayer : CCLayer
 {
+	CCTMXTiledMap *_tileMap;
+	CCTMXLayer *_background;
+	CCTMXLayer *_wall;
+	
+	Player *_player;
+	
+	CGPoint currentTouchLocation;
 }
 
 // returns a CCScene that contains the HelloWorldLayer as the only child
 +(CCScene *) scene;
+-(float) LerpA:(float) a B:(float) b T:(float) t;
+-(BOOL)boundryCheck:(CGPoint)location;
+-(BOOL)isPassable:(CGPoint)location;
+-(void)vertexCheck:(CCSprite *) sprite;
+-(void)updateVertexZ:(CGPoint)tilePos withSprite:(CCSprite *) sprite;
+-(CGPoint)tileCoordForPosition:(CGPoint)position;
+
+
+@property (nonatomic, retain) CCTMXTiledMap *tileMap;
+@property (nonatomic, retain) CCTMXLayer *background;
+@property (nonatomic, retain) CCTMXLayer *wall;
 
 @end
