@@ -45,8 +45,8 @@
 	
 	// Try to use CADisplayLink director
 	// if it fails (SDK < 3.1) use the default director
-	if( ! [CCDirector setDirectorType:kCCDirectorTypeDisplayLink] )
-		[CCDirector setDirectorType:kCCDirectorTypeDefault];
+	if([CCDirector setDirectorType:kCCDirectorTypeDisplayLink] == NO)
+	   [CCDirector setDirectorType:kCCDirectorTypeNSTimer];
 	
 	
 	CCDirector *director = [CCDirector sharedDirector];
@@ -63,7 +63,7 @@
 	//
 	EAGLView *glView = [EAGLView viewWithFrame:[window bounds]
 								   pixelFormat:kEAGLColorFormatRGB565	// kEAGLColorFormatRGBA8
-								   depthFormat:0						// GL_DEPTH_COMPONENT16_OES
+								   depthFormat:GL_DEPTH_COMPONENT24_OES						// GL_DEPTH_COMPONENT16_OES
 						];
 	
 	// attach the openglView to the director
@@ -96,10 +96,12 @@
 	[viewController setView:glView];
 	
 	// make the View Controller a child of the main window
-	[window addSubview: viewController.view];
+	[window addSubview: glView];
 	
 	[window makeKeyAndVisible];
 	
+	
+	[director setProjection:kCCDirectorProjection2D];
 	// Default texture format for PNG/BMP/TIFF/JPEG/GIF images
 	// It can be RGBA8888, RGBA4444, RGB5_A1, RGB565
 	// You can change anytime.

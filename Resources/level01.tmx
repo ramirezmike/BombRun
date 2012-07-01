@@ -1,16 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="isometric" width="10" height="20" tilewidth="64" tileheight="32">
- <tileset firstgid="1" name="iso_temp" tilewidth="64" tileheight="64">
-  <image source="iso_temp.png" width="128" height="64"/>
+<map version="1.0" orientation="isometric" width="50" height="50" tilewidth="64" tileheight="32">
+ <tileset firstgid="1" name="levelTiles" tilewidth="64" tileheight="64">
+  <image source="levelTiles.png" width="256" height="128"/>
+  <tile id="2">
+   <properties>
+    <property name="Wall" value="True"/>
+   </properties>
+  </tile>
+  <tile id="3">
+   <properties>
+    <property name="Wall" value="True"/>
+   </properties>
+  </tile>
+  <tile id="4">
+   <properties>
+    <property name="Wall" value="True"/>
+   </properties>
+  </tile>
+  <tile id="5">
+   <properties>
+    <property name="Wall" value="True"/>
+   </properties>
+  </tile>
+  <tile id="6">
+   <properties>
+    <property name="Wall" value="True"/>
+   </properties>
+  </tile>
+  <tile id="7">
+   <properties>
+    <property name="Wall" value="True"/>
+   </properties>
+  </tile>
  </tileset>
- <layer name="Background" width="10" height="20">
+ <layer name="Background" width="50" height="50">
+  <properties>
+   <property name="cc_vertexz" value="-1000"/>
+  </properties>
   <data encoding="base64" compression="zlib">
-   eJxjYmBgYBrFo3gUY8UAd14BkQ==
+   eJztwwEJAAAMBKHj+4dejoGCq6aqqqqqqqqqqqrPH9yzE4k=
   </data>
  </layer>
- <layer name="Wall" width="10" height="20">
+ <layer name="Wall" width="50" height="50">
+  <properties>
+   <property name="cc_vertexz" value="automatic"/>
+  </properties>
   <data encoding="base64" compression="zlib">
-   eJxjZGBgYCQSEwKj6kbVDSV1xGAAWxAAOQ==
+   eJztmgELAiEMhYWy7v//4ogI5PDc3tt0lg7kytzTz5tTsCOldBPKM81v2alNtK3GIcXeyMJy/IJtjrnMa31Em1e+Orc50mffQdZvOV/oWO4VvXLfe39/EBxMvOaLz6yuRk/SX5mj9Kv5Z1A3kuPr+88cqO7m4PrT6DG6m4PrT6PH6G4Orj+NHqPrxWHNWUi91HYljtqYc6UeYYviaP3m8X5rWoiG5KfRZlgiOBhNaUyj4wrlKJ+zcKDrFmFpnd211oOj1Do/Ee3ZOGaKK1Z3BAeaI1GOc0F1tTGAni/Qswc7Dqu/dT9n27bWObM3W89DlnYWDsYP0ffg0Pha+pb6tzKkRr3UBuUofbS5STuWVr2Xr7etzmGNSW+zcDB+vYwZz4zvguW4Muk+ELkj1N4tWjjQee95z285z7HxczWntXqP+13PM2uk9Xofo03DYV3HI0wz3618Ev0fHykHvACTugfs
   </data>
  </layer>
 </map>

@@ -19,6 +19,10 @@
 	float distance;
 	float lengthFromCenter;
 	
+	BOOL inWater;
+	BOOL inAir;
+	BOOL isAlive;
+	
 	CGPoint playerStartPoint;
 	CGPoint playerEndPoint;
 	CGPoint normalizedVector;

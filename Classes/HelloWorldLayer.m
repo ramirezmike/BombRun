@@ -10,18 +10,100 @@
 // Import the interfaces
 #import "HelloWorldLayer.h"
 #import "Player.h"
+#import "Fireball.h"
 // HelloWorldLayer implementation
+
+@implementation FireballLayer
+
+
+-(void)newPosition
+{
+		float randomX = (arc4random()%480);
+		float randomY = (arc4random()%200);
+		fireball.position = ccp(randomX,randomY);
+		fireball.opacity = 150;
+}
+
+-(CGPoint)getShadowWorldCoordinates
+{
+	CGSize screenSize = [[CCDirector sharedDirector]winSize];
+	CGPoint center = ccp(screenSize.width/2,screenSize.height/2);
+	CGPoint vectorFromCenter = ccpSub(fireball.position, center);
+	
+	CGPoint worldCenter = [parentLayer playerWorldPosition];
+	CGPoint realWorldPosition = ccpAdd(worldCenter, vectorFromCenter);
+	
+	return realWorldPosition;
+}
+
+-(void)updateFireball:(ccTime)dt
+{
+	fireball.scale = fireballScale;
+	fireballScale -= 0.1;
+	
+		
+	if (fireballScale < 3.0 && [[parentLayer fireballs]count] < 1) 
+	{
+		CGPoint realWorldCoords = [self getShadowWorldCoordinates];
+		[parentLayer receiveShadowWorldCoordinates:realWorldCoords];
+		fireball.visible = NO;
+		[self newPosition];
+
+	}
+	if (fireballScale < 0.0 && [[parentLayer fireballs]count] < 1) 
+	{
+		fireballScale = 5.0;
+		fireball.visible = YES;
+	}
+}
+
+-(id)initWithHelloLayer:(HelloWorldLayer *) helloLayer
+{
+	if ((self = [super init])) 
+	{
+		parentLayer = helloLayer;
+		fireball = [CCSprite spriteWithFile:@"shadow.png"];
+		fireballScale = 5.0;
+		[self newPosition];
+		[self schedule:@selector(updateFireball:) interval:0.01];
+		[self addChild:fireball];
+	}
+	return self;
+}
+
+@end
+
+
+
+
 @implementation HelloWorldLayer
 @synthesize tileMap = _tileMap;
 @synthesize background  = _background;
 @synthesize wall = _wall;
+@synthesize fireballs;
 
 +(CCScene *) scene
 {
 	CCScene *scene = [CCScene node];
 	HelloWorldLayer *layer = [HelloWorldLayer node];
+	FireballLayer *fireLayer = [[FireballLayer alloc]initWithHelloLayer:layer];
 	[scene addChild: layer];
+	[scene addChild:fireLayer];
 	return scene;
+}
+
+-(CGPoint)positionForTileCoord:(CGPoint)tileCoord
+{
+	tileCoord.y -= 1;
+	CGPoint worldPosition = [_background positionAt:tileCoord];
+	worldPosition = ccpAdd(worldPosition, _tileMap.position);
+
+	return worldPosition;
+}
+
+-(CGPoint)playerWorldPosition
+{
+	return _player.position;
 }
 
 -(CGPoint)tileCoordForPosition:(CGPoint)location
@@ -61,6 +143,27 @@
 -(void)nextFrame:(ccTime)dt
 {
 	[_player frameUpdate];
+	
+	
+	for (Fireball* ball in fireballs) 
+	{
+		[ball updateFireball];
+		if (ball.lifeCount <= 0) 
+		{
+			[fireballs removeObject:ball];
+		}
+	}
+
+}
+
+
+-(void)receiveShadowWorldCoordinates:(CGPoint) coords
+{
+	Fireball *ball = [[Fireball alloc]initWithCoords:coords andLayer:self];
+	[fireballs addObject:ball]; 
+	
+	[ball lockShadow:coords];
+	[ball sendFireball:coords];
 }
 
 -(CGPoint) locationFromTouch:(UITouch *)touch
@@ -212,25 +315,32 @@
 		//label.position =  ccp( size.width /2 , size.height/2 );
 		//[self addChild: label];
 		
-		CGSize screenSize = [[CCDirector sharedDirector] winSize];
+	//	CGSize screenSize = [[CCDirector sharedDirector] winSize];
 	
 		self.isTouchEnabled = YES;
 		
 		self.tileMap = [CCTMXTiledMap tiledMapWithTMXFile:@"level01.tmx"];
 		self.background = [_tileMap layerNamed:@"Background"];
 		self.wall = [_tileMap layerNamed:@"Wall"];
-		_tileMap.position = ccp(0,0);
+		_tileMap.position = ccp(0 + _tileMap.contentSize.width/4,0 - _tileMap.contentSize.height/2);
 		[self addChild:_tileMap z:-1];
 		
 		_player = [[Player alloc]initWithLayer:self];
-		_player.position = ccp(screenSize.width/8 - _player.contentSize.width,screenSize.height/1.5 - _player.contentSize.height);
+		CGPoint playerTileSpawn = ccp(2,2);
+		playerTileSpawn = [self positionForTileCoord:playerTileSpawn];
+		_player.position = playerTileSpawn;
 		_player.anchorPoint = CGPointMake(0.5f, 0.2f);	
 		
+		//_player.position = ccp(0,0);
+		
+		fireballs = [[NSMutableArray alloc]init];
+		
 		[self addChild:_player];
+
 		[self runAction:[CCFollow actionWithTarget:_player]];
+		
 
 		[self schedule:@selector(nextFrame:) interval:0.01];
-
 
 	}
 	return self;
@@ -242,6 +352,7 @@
 	_tileMap = nil;
 	_background = nil;
 	_wall = nil;
+	[_fireballs release];
 	[super dealloc];
 }
 @end
