@@ -10,14 +10,17 @@
 // When you import this file, you import all the cocos2d classes
 #import "cocos2d.h"
 @class Player;
+@class FireWall;
 @class HelloWorldLayer;
 
 @interface FireballLayer : CCLayer
 {
 	FireballLayer *_layer;
 	CCSprite* fireball;
+	CCSprite* rope;
 	float fireballScale;
 	HelloWorldLayer* parentLayer;
+
 }
 
 -(id)initWithHelloLayer:(HelloWorldLayer *) helloLayer;
@@ -37,14 +40,16 @@
 	NSMutableArray * _fireballs;
 	
 	CCSprite *fireballShadow;
-	//CCSprite *fireball;
 	float fireballScale;
 	float shadowScale;
+	FireWall *wallOFire;
 	
 	CGPoint currentTouchLocation;
+	
+	BOOL wickLit;
 }
 
-
+@property (readwrite, assign) BOOL wickLit;
 
 
 // returns a CCScene that contains the HelloWorldLayer as the only child

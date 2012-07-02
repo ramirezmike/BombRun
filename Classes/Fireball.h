@@ -25,6 +25,7 @@
 @property (readwrite, assign) int lifeCount;
 
 -(id)initWithCoords:(CGPoint) coords andLayer:(HelloWorldLayer *) layer;
+-(BOOL)checkCollisionWithPlayer:(CGPoint) playerLocation;
 -(void)updateFireball;
 -(void)sendFireball:(CGPoint)coords;
 -(void)lockShadow:(CGPoint)coords;

@@ -2,11 +2,12 @@
 //  Fireball.m
 //  BombRun
 //
-//  Created by Michael Ramirez on 7/1/12.
-//  Copyright 2012 __MyCompanyName__. All rights reserved.
+//  Created by factorysettings on 7/1/12.
+//  Copyright 2012 . All rights reserved.
 //
 
 #import "Fireball.h"
+#import "HelloWorldLayer.h"
 
 
 @implementation Fireball
@@ -18,7 +19,6 @@
 {
 	if (!landed) 
 	{
-		//NSLog(@"%f",shadowScale);
 		shadowScale -= 0.1;
 		fireballShadow.scale = shadowScale;
 	
@@ -32,6 +32,7 @@
 	if (fireballScale < 1.0) 
 	{
 		fireballScale = 1.0;
+		landed = TRUE;
 		lifeCount -= 1;
 	}
 	else 
@@ -49,12 +50,32 @@
 
 }
 
+-(BOOL)checkCollisionWithPlayer:(CGPoint) playerLocation
+{
+	CGPoint playerTile = [_layer tileCoordForPosition:playerLocation];
+	CGPoint centerTile = [_layer tileCoordForPosition:fireball.position];
+	CGPoint leftTile = ccp(centerTile.x-1,centerTile.y);
+	CGPoint rightTile = ccp(centerTile.x+1, centerTile.y);
+	CGPoint upTile = ccp(centerTile.x,centerTile.y+1);
+	CGPoint downTile = ccp(centerTile.x,centerTile.y-1);
+	if (landed && 
+		(CGPointEqualToPoint(centerTile, playerTile) ||
+		CGPointEqualToPoint(leftTile, playerTile) ||
+		CGPointEqualToPoint(rightTile, playerTile) ||
+		CGPointEqualToPoint(upTile, playerTile) ||
+		CGPointEqualToPoint(downTile, playerTile))) 
+	{
+		NSLog(@"HIT!");
+		return TRUE;
+	}
+	return FALSE;
+}
+
 -(void)removeSelf
 {
 	[_layer removeChild:fireballShadow cleanup:YES];
 	fireballShadow = nil;
 	[fireballShadow release];
-	landed = TRUE;
 }
 
 -(void)sendFireball:(CGPoint)coords

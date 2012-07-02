@@ -7,9 +7,15 @@
 //
 
 #import "cocos2d.h"
+@class HelloWorldLayer;
+@interface FireWall : CCSprite	{
 
-@interface FireWall : CCNode	{
-
+	int movement;
+	HelloWorldLayer *_layer;
 }
+
+-(id)initWithLayer:(HelloWorldLayer *)layer andSpeed:(int) speed;
+-(void)moveWall;
+
 
 @end

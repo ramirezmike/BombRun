@@ -11,6 +11,7 @@
 #import "HelloWorldLayer.h"
 #import "Player.h"
 #import "Fireball.h"
+#import "FireWall.h"
 // HelloWorldLayer implementation
 
 @implementation FireballLayer
@@ -55,6 +56,11 @@
 		fireballScale = 5.0;
 		fireball.visible = YES;
 	}
+	
+	if ([parentLayer wickLit]) 
+	{
+		rope.scaleX -= 0.1;
+	}
 }
 
 -(id)initWithHelloLayer:(HelloWorldLayer *) helloLayer
@@ -64,9 +70,17 @@
 		parentLayer = helloLayer;
 		fireball = [CCSprite spriteWithFile:@"shadow.png"];
 		fireballScale = 5.0;
+		
+		//rope = [CCSprite spriteWithFile:@"rope.png"];
+		rope = [CCSprite spriteWithFile:@"rope.png"];
+		rope.position = ccp(10,10);
+		rope.anchorPoint = ccp(0,1);
+		rope.scaleX = 29;
+		rope.scaleY = 1;
 		[self newPosition];
 		[self schedule:@selector(updateFireball:) interval:0.01];
 		[self addChild:fireball];
+		[self addChild:rope];
 	}
 	return self;
 }
@@ -80,7 +94,7 @@
 @synthesize tileMap = _tileMap;
 @synthesize background  = _background;
 @synthesize wall = _wall;
-@synthesize fireballs;
+@synthesize fireballs, wickLit;
 
 +(CCScene *) scene
 {
@@ -143,7 +157,7 @@
 -(void)nextFrame:(ccTime)dt
 {
 	[_player frameUpdate];
-	
+	[wallOFire moveWall];
 	
 	for (Fireball* ball in fireballs) 
 	{
@@ -152,6 +166,17 @@
 		{
 			[fireballs removeObject:ball];
 		}
+		if ([ball checkCollisionWithPlayer:_player.position]) 
+		{
+			wickLit = TRUE;
+		}
+	}
+	
+	if (_player.position.y > wallOFire.position.y - wallOFire.contentSize.height/2) 
+	{
+		NSLog(@"FIREWALL HIT!");
+		NSLog(@"PLAYER: %@ WALL: %@", NSStringFromCGPoint(_player.position),NSStringFromCGPoint(wallOFire.position));
+		wickLit = TRUE;
 	}
 
 }
@@ -326,14 +351,21 @@
 		[self addChild:_tileMap z:-1];
 		
 		_player = [[Player alloc]initWithLayer:self];
-		CGPoint playerTileSpawn = ccp(2,2);
+		CGPoint playerTileSpawn = ccp(4,4);
 		playerTileSpawn = [self positionForTileCoord:playerTileSpawn];
 		_player.position = playerTileSpawn;
 		_player.anchorPoint = CGPointMake(0.5f, 0.2f);	
 		
 		//_player.position = ccp(0,0);
 		
+		wickLit = FALSE;
+		
 		fireballs = [[NSMutableArray alloc]init];
+		
+		wallOFire = [[FireWall alloc]initWithLayer:self andSpeed:2];
+		wallOFire.position = [self positionForTileCoord:ccp(0,0)];
+		[self addChild:wallOFire];
+		
 		
 		[self addChild:_player];
 
