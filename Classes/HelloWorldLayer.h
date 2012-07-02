@@ -18,6 +18,9 @@
 	FireballLayer *_layer;
 	CCSprite* fireball;
 	CCSprite* rope;
+	CCSprite* flame1;
+	CCSprite* flame2;
+	
 	float fireballScale;
 	HelloWorldLayer* parentLayer;
 

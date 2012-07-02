@@ -12,6 +12,7 @@
 #import "Player.h"
 #import "Fireball.h"
 #import "FireWall.h"
+#import "GameOverScene.h"
 // HelloWorldLayer implementation
 
 @implementation FireballLayer
@@ -42,6 +43,10 @@
 	fireball.scale = fireballScale;
 	fireballScale -= 0.1;
 	
+	flame1.rotation -= 30;
+	flame2.rotation += 30;
+	
+
 		
 	if (fireballScale < 3.0 && [[parentLayer fireballs]count] < 1) 
 	{
@@ -59,7 +64,18 @@
 	
 	if ([parentLayer wickLit]) 
 	{
+		flame1.visible = YES;
+		flame2.visible = YES;
 		rope.scaleX -= 0.1;
+		flame1.position = ccp(flame1.position.x - 1.6, flame1.position.y);
+		flame2.position = ccp(flame2.position.x - 1.6, flame2.position.y);
+
+	}
+	if (rope.scaleX < 0) 
+	{
+		GameOverScene *gameOverScene = [GameOverScene node];
+		[gameOverScene.layer.label setString:@"You Lose :["];
+		[[CCDirector sharedDirector] replaceScene:gameOverScene];
 	}
 }
 
@@ -77,10 +93,27 @@
 		rope.anchorPoint = ccp(0,1);
 		rope.scaleX = 29;
 		rope.scaleY = 1;
+		
+		CGPoint flamePoint = ccp(470,10);
+		flame1 = [CCSprite spriteWithFile:@"flame.png"];
+		flame1.position = flamePoint;
+		
+		flame2 = [CCSprite spriteWithFile:@"flame.png"];
+		flame2.position = flamePoint;
+		
+		flame2.rotation += 45;
+		
+		flame1.visible = NO;
+		flame2.visible = NO;
+		
+		
 		[self newPosition];
 		[self schedule:@selector(updateFireball:) interval:0.01];
 		[self addChild:fireball];
 		[self addChild:rope];
+		[self addChild:flame1];
+		[self addChild:flame2];
+
 	}
 	return self;
 }
@@ -177,6 +210,9 @@
 		NSLog(@"FIREWALL HIT!");
 		NSLog(@"PLAYER: %@ WALL: %@", NSStringFromCGPoint(_player.position),NSStringFromCGPoint(wallOFire.position));
 		wickLit = TRUE;
+				GameOverScene *gameOverScene = [GameOverScene node];
+		[gameOverScene.layer.label setString:@"You Lose :["];
+		[[CCDirector sharedDirector] replaceScene:gameOverScene];
 	}
 
 }
