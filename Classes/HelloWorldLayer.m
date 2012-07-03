@@ -1,10 +1,4 @@
-//
-//  HelloWorldLayer.m
-//  BombRun
-//
-//  Created by Michael Ramirez on 6/29/12.
-//  Copyright __MyCompanyName__ 2012. All rights reserved.
-//
+
 
 
 // Import the interfaces
@@ -12,6 +6,8 @@
 #import "Player.h"
 #import "Fireball.h"
 #import "FireWall.h"
+#import "SimpleAudioEngine.h"
+
 #import "GameOverScene.h"
 // HelloWorldLayer implementation
 
@@ -74,7 +70,9 @@
 	if (rope.scaleX < 0) 
 	{
 		GameOverScene *gameOverScene = [GameOverScene node];
-		[gameOverScene.layer.label setString:@"You Lose :["];
+		[gameOverScene.layer.label setString:@"You Lost! :("];
+		[[SimpleAudioEngine sharedEngine]playEffect:@"explosion.wav"];
+
 		[[CCDirector sharedDirector] replaceScene:gameOverScene];
 	}
 }
@@ -211,7 +209,19 @@
 		NSLog(@"PLAYER: %@ WALL: %@", NSStringFromCGPoint(_player.position),NSStringFromCGPoint(wallOFire.position));
 		wickLit = TRUE;
 				GameOverScene *gameOverScene = [GameOverScene node];
-		[gameOverScene.layer.label setString:@"You Lose :["];
+		[gameOverScene.layer.label setString:@"You Lost! :("];
+				[[SimpleAudioEngine sharedEngine]playEffect:@"explosion.wav"];
+
+		[[CCDirector sharedDirector] replaceScene:gameOverScene];
+	}
+	
+	if (_player.position.y < -1350) 
+	{
+		GameOverScene *gameOverScene = [GameOverScene node];
+		[gameOverScene.layer.label setString:@"You Bombed The Orphanage! :D"];
+		[[SimpleAudioEngine sharedEngine]playEffect:@"explosion.wav"];
+		[[SimpleAudioEngine sharedEngine]playEffect:@"laugh.wav"];
+
 		[[CCDirector sharedDirector] replaceScene:gameOverScene];
 	}
 
@@ -287,7 +297,7 @@
 		//id blocks_movement = [tileProperties objectForKey:@"blocks_movement"];
 		if (tileProperties) 
 		{
-			NSString *wall = [tileProperties valueForKey:@"Wall"];
+			NSString *wall = [tileProperties valueForKey:@"wall"];
 			if (wall && [wall compare:@"True"] == NSOrderedSame) 
 			{
 				isPassable = FALSE;
@@ -379,7 +389,11 @@
 	//	CGSize screenSize = [[CCDirector sharedDirector] winSize];
 	
 		self.isTouchEnabled = YES;
-		
+	
+		[[SimpleAudioEngine sharedEngine] preloadEffect:@"explosion.wav"];
+        [[SimpleAudioEngine sharedEngine] preloadEffect:@"laugh.wav"];
+        [[SimpleAudioEngine sharedEngine] preloadEffect:@"step.wav"];
+				
 		self.tileMap = [CCTMXTiledMap tiledMapWithTMXFile:@"level01.tmx"];
 		self.background = [_tileMap layerNamed:@"Background"];
 		self.wall = [_tileMap layerNamed:@"Wall"];
@@ -387,7 +401,7 @@
 		[self addChild:_tileMap z:-1];
 		
 		_player = [[Player alloc]initWithLayer:self];
-		CGPoint playerTileSpawn = ccp(4,4);
+		CGPoint playerTileSpawn = ccp(12,12);
 		playerTileSpawn = [self positionForTileCoord:playerTileSpawn];
 		_player.position = playerTileSpawn;
 		_player.anchorPoint = CGPointMake(0.5f, 0.2f);	
@@ -398,7 +412,7 @@
 		
 		fireballs = [[NSMutableArray alloc]init];
 		
-		wallOFire = [[FireWall alloc]initWithLayer:self andSpeed:2];
+		wallOFire = [[FireWall alloc]initWithLayer:self andSpeed:3];
 		wallOFire.position = [self positionForTileCoord:ccp(0,0)];
 		[self addChild:wallOFire];
 		

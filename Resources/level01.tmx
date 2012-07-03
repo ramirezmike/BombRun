@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="isometric" width="50" height="50" tilewidth="64" tileheight="32">
+<map version="1.0" orientation="isometric" width="100" height="100" tilewidth="64" tileheight="32">
  <tileset firstgid="1" name="levelTiles" tilewidth="64" tileheight="64">
-  <image source="levelTiles.png" width="256" height="128"/>
+  <image source="levelTiles.png" width="256" height="256"/>
+  <tile id="0">
+   <properties>
+    <property name="wall" value="True"/>
+   </properties>
+  </tile>
   <tile id="2">
    <properties>
-    <property name="Wall" value="True"/>
+    <property name="wall" value="True"/>
    </properties>
   </tile>
   <tile id="3">
@@ -14,17 +19,17 @@
   </tile>
   <tile id="4">
    <properties>
-    <property name="Wall" value="True"/>
+    <property name="wall" value="True"/>
    </properties>
   </tile>
   <tile id="5">
    <properties>
-    <property name="Wall" value="True"/>
+    <property name="wall" value="True"/>
    </properties>
   </tile>
   <tile id="6">
    <properties>
-    <property name="Wall" value="True"/>
+    <property name="wall" value="True"/>
    </properties>
   </tile>
   <tile id="7">
@@ -32,21 +37,36 @@
     <property name="Wall" value="True"/>
    </properties>
   </tile>
+  <tile id="8">
+   <properties>
+    <property name="Water" value="True"/>
+   </properties>
+  </tile>
+  <tile id="9">
+   <properties>
+    <property name="wall" value="True"/>
+   </properties>
+  </tile>
+  <tile id="12">
+   <properties>
+    <property name="wall" value="True"/>
+   </properties>
+  </tile>
  </tileset>
- <layer name="Background" width="50" height="50">
+ <layer name="Background" width="100" height="100">
   <properties>
    <property name="cc_vertexz" value="-1000"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJztwwEJAAAMBKHj+4dejoGCq6aqqqqqqqqqqqrPH9yzE4k=
+   eJztwwEJAAAMBKHj+4ceLIeCq6aqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqv4DIkZOIQ==
   </data>
  </layer>
- <layer name="Wall" width="50" height="50">
+ <layer name="Wall" width="100" height="100">
   <properties>
    <property name="cc_vertexz" value="automatic"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   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
+   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
   </data>
  </layer>
 </map>

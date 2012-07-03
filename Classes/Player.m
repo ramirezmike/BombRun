@@ -8,6 +8,8 @@
 
 #import "Player.h"
 #import "HelloWorldLayer.h"
+#import "SimpleAudioEngine.h"
+
 
 @implementation Player
 
@@ -90,6 +92,8 @@
 	{
 		[self moveTowardEndPoint];
 		[_layer vertexCheck:self];
+		[[SimpleAudioEngine sharedEngine]playEffect:@"step.wav"];
+
 	}
 	
 }

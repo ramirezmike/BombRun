@@ -1,10 +1,3 @@
-//
-//  Fireball.h
-//  BombRun
-//
-//  Created by Michael Ramirez on 7/1/12.
-//  Copyright 2012 __MyCompanyName__. All rights reserved.
-//
 
 #import "cocos2d.h"
 
